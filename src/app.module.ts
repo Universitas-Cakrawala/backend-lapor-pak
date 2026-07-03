@@ -9,6 +9,7 @@ import { ReportsModule } from './reports/reports.module';
 import { MediaModule } from './media/media.module';
 import { StatusModule } from './status/status.module';
 import { NotificationModule } from './notification/notification.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { NotificationModule } from './notification/notification.module';
     MediaModule,
     NotificationModule,
     StatusModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
