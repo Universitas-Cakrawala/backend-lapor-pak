@@ -1,4 +1,12 @@
-import { Controller, Get, Param, UseGuards, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Body,
+  Param,
+  UseGuards,
+  HttpStatus,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -11,6 +19,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UserResponseDto } from './dto/user-response.dto';
 
@@ -60,6 +69,23 @@ export class UsersController {
       statusCode: HttpStatus.OK,
       message: 'Data user berhasil diambil',
       data: userProfile,
+    };
+  }
+
+  @Patch('me/fcm-token')
+  @ApiOperation({ summary: 'Memperbarui FCM Token pengguna' })
+  @ApiBody({
+    schema: { type: 'object', properties: { fcmToken: { type: 'string' } } },
+  })
+  @ApiResponse({ status: 200, description: 'FCM Token berhasil diperbarui' })
+  async updateFcmToken(
+    @GetUser() user: any,
+    @Body('fcmToken') fcmToken: string,
+  ) {
+    await this.usersService.updateFcmToken(user.id, fcmToken);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'FCM Token berhasil diperbarui',
     };
   }
 }
