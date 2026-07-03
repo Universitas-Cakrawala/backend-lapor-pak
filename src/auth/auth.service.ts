@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, ConflictException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
@@ -14,7 +19,9 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     if (dto.password !== dto.rePassword) {
-      throw new BadRequestException('Password dan konfirmasi password tidak cocok');
+      throw new BadRequestException(
+        'Password dan konfirmasi password tidak cocok',
+      );
     }
 
     const existingUsername = await this.prisma.user.findUnique({
@@ -54,7 +61,7 @@ export class AuthService {
       where: { username },
     });
 
-    if (user && await bcrypt.compare(pass, user.passwordHash)) {
+    if (user && (await bcrypt.compare(pass, user.passwordHash))) {
       const { passwordHash, ...result } = user;
       return result;
     }

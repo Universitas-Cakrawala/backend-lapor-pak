@@ -30,7 +30,9 @@ export class UsersService {
       throw new NotFoundException('User tidak ditemukan');
     }
 
-    return plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true });
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   // Digunakan oleh AuthService jika diintegrasikan di kemudian hari

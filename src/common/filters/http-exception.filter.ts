@@ -1,4 +1,10 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 
@@ -17,7 +23,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = exception.getStatus();
       const exceptionResponse: any = exception.getResponse();
       message = exceptionResponse.message || exception.message;
-      
+
       // Handle class-validator errors
       if (Array.isArray(message)) {
         errors = message;

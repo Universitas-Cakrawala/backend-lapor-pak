@@ -29,7 +29,11 @@ export class UserResponseDto {
   role: Role;
 
   @Expose()
-  @ApiProperty({ description: 'Instansi pengguna (khusus ADMIN)', required: false, nullable: true })
+  @ApiProperty({
+    description: 'Instansi pengguna (khusus ADMIN)',
+    required: false,
+    nullable: true,
+  })
   instansi: string | null;
 
   @Expose()

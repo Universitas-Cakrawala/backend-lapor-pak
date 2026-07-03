@@ -9,7 +9,9 @@ import * as Joi from 'joi';
       validationSchema: Joi.object({
         // App
         PORT: Joi.number().default(3000),
-        NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test')
+          .default('development'),
         // Database
         DATABASE_URL: Joi.string().required(),
         // JWT

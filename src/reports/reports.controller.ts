@@ -1,11 +1,27 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Query, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+  Query,
+  HttpStatus,
+} from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
 import { ReportQueryDto } from './dto/report-query.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { GetUser } from '../common/decorators/get-user.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { ReportResponseDto } from './dto/report-response.dto';
 
 @ApiTags('reports')
@@ -17,7 +33,11 @@ export class ReportsController {
 
   @Post()
   @ApiOperation({ summary: 'Membuat laporan baru' })
-  @ApiResponse({ status: 201, description: 'Laporan berhasil dibuat', type: ReportResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Laporan berhasil dibuat',
+    type: ReportResponseDto,
+  })
   async create(@GetUser() user: any, @Body() createReportDto: CreateReportDto) {
     const report = await this.reportsService.create(user.id, createReportDto);
     return {
@@ -28,7 +48,9 @@ export class ReportsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Mendapatkan daftar laporan (dengan filter & pagination)' })
+  @ApiOperation({
+    summary: 'Mendapatkan daftar laporan (dengan filter & pagination)',
+  })
   @ApiResponse({ status: 200, description: 'Daftar laporan' })
   async findAll(@GetUser() user: any, @Query() query: ReportQueryDto) {
     const result = await this.reportsService.findAll(user.id, user.role, query);
@@ -40,7 +62,9 @@ export class ReportsController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Mendapatkan statistik laporan (mini-stats untuk Home)' })
+  @ApiOperation({
+    summary: 'Mendapatkan statistik laporan (mini-stats untuk Home)',
+  })
   @ApiResponse({ status: 200, description: 'Statistik laporan' })
   async getStats(@GetUser() user: any) {
     const stats = await this.reportsService.getUserStats(user.id);
@@ -53,7 +77,11 @@ export class ReportsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Mendapatkan detail laporan' })
-  @ApiResponse({ status: 200, description: 'Detail laporan', type: ReportResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Detail laporan',
+    type: ReportResponseDto,
+  })
   async findOne(@Param('id') id: string, @GetUser() user: any) {
     const report = await this.reportsService.findById(id, user.id, user.role);
     return {
@@ -65,13 +93,21 @@ export class ReportsController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Mengedit laporan' })
-  @ApiResponse({ status: 200, description: 'Laporan berhasil diperbarui', type: ReportResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Laporan berhasil diperbarui',
+    type: ReportResponseDto,
+  })
   async update(
     @Param('id') id: string,
     @GetUser() user: any,
     @Body() updateReportDto: UpdateReportDto,
   ) {
-    const report = await this.reportsService.update(id, user.id, updateReportDto);
+    const report = await this.reportsService.update(
+      id,
+      user.id,
+      updateReportDto,
+    );
     return {
       statusCode: HttpStatus.OK,
       message: 'Laporan berhasil diperbarui',

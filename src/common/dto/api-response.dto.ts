@@ -10,6 +10,9 @@ export class ApiResponseDto<T> {
   @ApiProperty({ description: 'Data response' })
   data?: T;
 
-  @ApiProperty({ description: 'Metadata pagination (jika ada)', required: false })
+  @ApiProperty({
+    description: 'Metadata pagination (jika ada)',
+    required: false,
+  })
   meta?: any;
 }

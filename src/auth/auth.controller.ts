@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -14,7 +22,10 @@ export class AuthController {
   @ApiOperation({ summary: 'Registrasi akun pelapor baru' })
   @ApiResponse({ status: 201, description: 'Registrasi berhasil' })
   @ApiResponse({ status: 400, description: 'Validasi gagal' })
-  @ApiResponse({ status: 409, description: 'Username atau email sudah terdaftar' })
+  @ApiResponse({
+    status: 409,
+    description: 'Username atau email sudah terdaftar',
+  })
   async register(@Body() registerDto: RegisterDto) {
     const user = await this.authService.register(registerDto);
     return {

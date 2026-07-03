@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
@@ -35,7 +40,9 @@ export class ReportsService {
       },
     });
 
-    return plainToInstance(ReportResponseDto, report, { excludeExtraneousValues: true });
+    return plainToInstance(ReportResponseDto, report, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async findAll(userId: string, role: Role, query: ReportQueryDto) {
@@ -75,7 +82,9 @@ export class ReportsService {
       this.prisma.report.count({ where }),
     ]);
 
-    const data = plainToInstance(ReportResponseDto, reports, { excludeExtraneousValues: true });
+    const data = plainToInstance(ReportResponseDto, reports, {
+      excludeExtraneousValues: true,
+    });
 
     return {
       data,
@@ -92,7 +101,9 @@ export class ReportsService {
     const report = await this.prisma.report.findUnique({
       where: { id },
       include: {
-        user: { select: { id: true, fullName: true, phone: true, email: true } },
+        user: {
+          select: { id: true, fullName: true, phone: true, email: true },
+        },
         history: {
           orderBy: { timestamp: 'asc' },
           include: {
@@ -110,7 +121,9 @@ export class ReportsService {
       throw new ForbiddenException('Anda tidak memiliki akses ke laporan ini');
     }
 
-    return plainToInstance(ReportResponseDto, report, { excludeExtraneousValues: true });
+    return plainToInstance(ReportResponseDto, report, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async update(id: string, userId: string, dto: UpdateReportDto) {
@@ -125,7 +138,9 @@ export class ReportsService {
     }
 
     if (report.status !== ReportStatus.MENUNGGU) {
-      throw new BadRequestException('Laporan hanya bisa diedit saat status Menunggu');
+      throw new BadRequestException(
+        'Laporan hanya bisa diedit saat status Menunggu',
+      );
     }
 
     const updated = await this.prisma.report.update({
@@ -144,7 +159,9 @@ export class ReportsService {
       },
     });
 
-    return plainToInstance(ReportResponseDto, updated, { excludeExtraneousValues: true });
+    return plainToInstance(ReportResponseDto, updated, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async remove(id: string, userId: string) {
@@ -159,7 +176,9 @@ export class ReportsService {
     }
 
     if (report.status !== ReportStatus.MENUNGGU) {
-      throw new BadRequestException('Laporan hanya bisa dibatalkan saat status Menunggu');
+      throw new BadRequestException(
+        'Laporan hanya bisa dibatalkan saat status Menunggu',
+      );
     }
 
     // Prisma transactional delete due to foreign keys (or use cascade if configured, but explicit is safer here if schema doesn't have onDelete: Cascade)
@@ -174,9 +193,15 @@ export class ReportsService {
   async getUserStats(userId: string) {
     const [total, menunggu, diproses, selesai] = await Promise.all([
       this.prisma.report.count({ where: { userId } }),
-      this.prisma.report.count({ where: { userId, status: ReportStatus.MENUNGGU } }),
-      this.prisma.report.count({ where: { userId, status: ReportStatus.DIPROSES } }),
-      this.prisma.report.count({ where: { userId, status: ReportStatus.SELESAI } }),
+      this.prisma.report.count({
+        where: { userId, status: ReportStatus.MENUNGGU },
+      }),
+      this.prisma.report.count({
+        where: { userId, status: ReportStatus.DIPROSES },
+      }),
+      this.prisma.report.count({
+        where: { userId, status: ReportStatus.SELESAI },
+      }),
     ]);
 
     return { total, menunggu, diproses, selesai };

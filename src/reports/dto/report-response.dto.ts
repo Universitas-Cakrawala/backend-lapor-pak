@@ -28,7 +28,7 @@ export class StatusHistoryResponseDto {
   @Expose()
   @ApiProperty()
   timestamp: Date;
-  
+
   @Expose()
   @ApiPropertyOptional({ type: () => UserResponseDto })
   @Type(() => UserResponseDto)

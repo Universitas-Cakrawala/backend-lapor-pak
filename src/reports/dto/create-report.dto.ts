@@ -1,4 +1,15 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsArray, MaxLength, Min, Max, ArrayMinSize, ArrayMaxSize } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  MaxLength,
+  Min,
+  Max,
+  ArrayMinSize,
+  ArrayMaxSize,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateReportDto {
@@ -14,13 +25,21 @@ export class CreateReportDto {
   @MaxLength(2000)
   description: string;
 
-  @ApiProperty({ description: 'Garis lintang (Latitude)', minimum: -90, maximum: 90 })
+  @ApiProperty({
+    description: 'Garis lintang (Latitude)',
+    minimum: -90,
+    maximum: 90,
+  })
   @IsNumber()
   @Min(-90)
   @Max(90)
   latitude: number;
 
-  @ApiProperty({ description: 'Garis bujur (Longitude)', minimum: -180, maximum: 180 })
+  @ApiProperty({
+    description: 'Garis bujur (Longitude)',
+    minimum: -180,
+    maximum: 180,
+  })
   @IsNumber()
   @Min(-180)
   @Max(180)
