@@ -1,12 +1,33 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { PrismaService } from './prisma/prisma.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('health')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('health')
+  @ApiOperation({ summary: 'Health check endpoint' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  async getHealth() {
+    let databaseStatus = 'disconnected';
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+      databaseStatus = 'connected';
+    } catch (e) {
+      databaseStatus = 'disconnected';
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        database: databaseStatus,
+      },
+    };
   }
 }
