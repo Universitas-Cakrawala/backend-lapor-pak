@@ -106,7 +106,7 @@ export class MediaController {
   }
 
   // Endpoint to serve file
-  @Get(':key(*)')
+  @Get('*key')
   @ApiOperation({ summary: 'Mendapatkan/menampilkan file dari S3/MinIO' })
   @ApiResponse({ status: 200, description: 'File dikirim melalui stream' })
   @ApiResponse({ status: 404, description: 'File tidak ditemukan' })
