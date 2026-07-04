@@ -1,98 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# ⚙️ Lapor Pak! - Backend API Services
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![MinIO](https://img.shields.io/badge/MinIO-C7202C?style=for-the-badge&logo=minio&logoColor=white)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Repositori ini berisi layanan *backend* (API) untuk **Lapor Pak**, sebuah sistem pelaporan infrastruktur publik. Dibangun dengan *framework* **NestJS** yang tangguh dan *scalable*, *backend* ini melayani seluruh alur data dari aplikasi *mobile*, mulai dari autentikasi, manajemen laporan, metrik statistik, hingga penyimpanan *file* media secara aman.
 
-## Description
+## ✨ Fitur Utama
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+*   **RESTful API Berbasis Modular**: Menggunakan arsitektur modular NestJS yang memisahkan tanggung jawab (*Separation of Concerns*) dengan rapi.
+*   **Autentikasi & Otorisasi Kuat**: Terintegrasi penuh dengan **JWT (JSON Web Token)** dan sistem *Role-Based Access Control* (RBAC) menggunakan *Guards* kustom (Admin vs Warga).
+*   **Database Relasional Efisien**: Memanfaatkan keandalan **PostgreSQL** yang dikelola dan dimigrasikan secara mulus melalui **Prisma ORM**.
+*   **Object Storage (S3-Compatible)**: Penyimpanan *file* foto dan video ditenagai oleh **MinIO**, lengkap dengan filter validasi *MIME-type* dan optimasi aliran data (*Stream*).
+*   **Standardisasi Respons**: Penggunaan global *Interceptor* untuk memastikan semua *output* API memiliki format pembungkus standar (`{ statusCode, message, data }`).
+*   **Dokumentasi Otomatis**: Menyediakan spesifikasi OpenAPI (Swagger) yang men-generate dokumentasi secara dinamis.
 
-## Project setup
+## 🛠️ Stack Teknologi
 
-```bash
-$ npm install
+*   **Framework**: NestJS (Node.js)
+*   **Bahasa Pemrograman**: TypeScript
+*   **ORM / Database Toolkit**: Prisma
+*   **Database**: PostgreSQL
+*   **Media Storage**: MinIO (S3 Compatible)
+*   **Validasi**: `class-validator` & `class-transformer`
+
+## 🚀 Cara Menjalankan (Getting Started)
+
+### Prasyarat Instalasi
+Pastikan komputer atau server lokal Anda telah memasang:
+1. **Node.js** (versi 18.x atau yang lebih baru).
+2. **PostgreSQL** (berjalan aktif dengan *database* kosong siap pakai).
+3. **MinIO Server** (sebagai *host* penyimpanan *bucket* S3 lokal).
+
+### Langkah Instalasi
+1. *Clone* repositori ini:
+   ```bash
+   git clone https://github.com/Universitas-Cakrawala/backend-lapor-pak.git
+   cd backend-lapor-pak
+   ```
+2. Instal semua dependensi NPM:
+   ```bash
+   npm install
+   ```
+3. Salin konfigurasi variabel lingkungan:
+   ```bash
+   cp .env.example .env
+   ```
+   *Buka file `.env` dan pastikan kredensial `DATABASE_URL` (PostgreSQL) serta kredensial API MinIO Anda sudah benar.*
+
+4. Sinkronisasikan skema *database* menggunakan Prisma:
+   ```bash
+   npx prisma migrate dev
+   ```
+   *(Opsional) Untuk memuat data simulasi awal (seed):*
+   ```bash
+   npx prisma db seed
+   ```
+
+5. Nyalakan Server (Mode Development):
+   ```bash
+   npm run start:dev
+   ```
+   Server secara *default* akan berjalan pada port **3000** (`http://localhost:3000`).
+
+## 📖 Dokumentasi API (Swagger)
+
+Setelah server berjalan, Anda dapat meninjau seluruh kontrak *endpoint*, *schema* *request/response*, dan mengujinya secara interaktif melalui Swagger UI di:
+
+👉 **`http://localhost:3000/api-docs`** 
+
+> **Catatan:** Untuk mencoba *endpoint* yang terkunci, daftarkan *user* (atau login admin), *copy* Token JWT dari *response*, lalu tempelkan ke menu **Authorize** berlambang gembok di kanan atas antarmuka Swagger.
+
+## 📂 Struktur Direktori
+
+```text
+src/
+├── admin/        # Modul dasbor admin (metrik statistik dan grafik mingguan)
+├── auth/         # Modul autentikasi (Login, Register, JWT Strategies)
+├── common/       # Komponen global (Interceptors, Decorators, Filters, Guards)
+├── media/        # Modul integrasi MinIO (Upload dan melayani Stream URL foto/video)
+├── prisma/       # Prisma Module sebagai abstraksi tunggal ke database
+├── reports/      # Logika pelaporan warga (CRUD, riwayat status, dan validasi form)
+├── users/        # Manajemen User (Pengambilan profil, update FCM token)
+└── main.ts       # Konfigurasi boot aplikasi, middleware, CORS, dan inisialisasi Swagger
 ```
 
-## Compile and run the project
+## 🤝 Kontribusi & Lisensi
 
-```bash
-# development
-$ npm run start
+Sistem *backend* ini merupakan pendamping dan sumber kebenaran (Source of Truth) bagi aplikasi *mobile* "Lapor Pak". Dikembangkan secara khusus untuk memenuhi parameter *Product Requirements Document* (PRD) v1.3 dari Tugas Akhir mata kuliah Mobile Computing, Universitas Cakrawala (Kelompok 5).
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+*Dibuat dengan ❤️ oleh Kelompok 5*
