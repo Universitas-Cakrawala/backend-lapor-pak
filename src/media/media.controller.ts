@@ -110,9 +110,15 @@ export class MediaController {
   @ApiOperation({ summary: 'Mendapatkan/menampilkan file dari S3/MinIO' })
   @ApiResponse({ status: 200, description: 'File dikirim melalui stream' })
   @ApiResponse({ status: 404, description: 'File tidak ditemukan' })
-  async getFile(@Param('key') key: string, @Res() res: Response) {
-    if (!key) {
+  async getFile(@Param('key') rawKey: any, @Res() res: Response) {
+    if (!rawKey) {
       throw new BadRequestException('Key harus disertakan');
+    }
+
+    let key = Array.isArray(rawKey) ? rawKey.join('/') : String(rawKey);
+
+    if (key.startsWith('/')) {
+      key = key.substring(1);
     }
 
     // Validate or set content type based on extension

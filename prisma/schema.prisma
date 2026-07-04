@@ -6,17 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  PELAPOR
-  ADMIN
-}
-
-enum ReportStatus {
-  MENUNGGU
-  DIPROSES
-  SELESAI
-}
-
 model User {
   id            String          @id @default(uuid())
   username      String          @unique
@@ -26,9 +15,8 @@ model User {
   passwordHash  String
   role          Role            @default(PELAPOR)
   instansi      String?
-  fcmToken      String?         // Firebase Cloud Messaging device token (Temuan #4)
+  fcmToken      String?
   createdAt     DateTime        @default(now())
-
   reports       Report[]        @relation("PelaporReports")
   statusChanges StatusHistory[] @relation("AdminChanges")
 }
@@ -36,7 +24,6 @@ model User {
 model Report {
   id          String          @id @default(uuid())
   userId      String
-  user        User            @relation("PelaporReports", fields: [userId], references: [id])
   roadName    String
   description String
   latitude    Float
@@ -46,18 +33,29 @@ model Report {
   status      ReportStatus    @default(MENUNGGU)
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-
+  user        User            @relation("PelaporReports", fields: [userId], references: [id])
   history     StatusHistory[]
 }
 
 model StatusHistory {
-  id          String       @id @default(uuid())
-  reportId    String
-  report      Report       @relation(fields: [reportId], references: [id])
-  status      ReportStatus
-  note        String?
-  proofPhotoUrl String?      // Bukti penyelesaian laporan (FR-14)
-  changedById String?
-  changedBy   User?        @relation("AdminChanges", fields: [changedById], references: [id])
-  timestamp   DateTime     @default(now())
+  id            String       @id @default(uuid())
+  reportId      String
+  status        ReportStatus
+  note          String?
+  proofPhotoUrl String?
+  changedById   String?
+  timestamp     DateTime     @default(now())
+  changedBy     User?        @relation("AdminChanges", fields: [changedById], references: [id])
+  report        Report       @relation(fields: [reportId], references: [id])
+}
+
+enum Role {
+  PELAPOR
+  ADMIN
+}
+
+enum ReportStatus {
+  MENUNGGU
+  DIPROSES
+  SELESAI
 }
