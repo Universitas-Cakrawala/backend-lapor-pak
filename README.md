@@ -92,4 +92,4 @@ src/
 Sistem *backend* ini merupakan pendamping dan sumber kebenaran (Source of Truth) bagi aplikasi *mobile* "Lapor Pak". Dikembangkan secara khusus untuk memenuhi parameter *Product Requirements Document* (PRD) dari Tugas Akhir mata kuliah Mobile Computing, Universitas Cakrawala (Kelompok 5).
 
 ---
-*Dibuat dengan ❤️ oleh Kelompok 5*
+*Dibuat dengan ❤️ Titanio*
