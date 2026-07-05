@@ -77,9 +77,9 @@ export class MediaController {
         if (file.mimetype !== 'video/mp4') {
           throw new BadRequestException('Format video harus MP4');
         }
-        if (file.size > 10 * 1024 * 1024) {
-          // 10MB
-          throw new BadRequestException('Ukuran video maksimal 10MB');
+        if (file.size > 50 * 1024 * 1024) {
+          // 50MB
+          throw new BadRequestException('Ukuran video maksimal 50MB');
         }
         videoCount++;
       } else {
