@@ -100,6 +100,7 @@ export class StatusService {
       reportId,
       newStatus,
       report.roadName,
+      report.user.id,
     );
 
     return plainToInstance(ReportResponseDto, updatedReport, {

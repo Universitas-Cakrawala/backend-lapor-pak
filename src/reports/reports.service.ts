@@ -11,10 +11,14 @@ import { ReportQueryDto } from './dto/report-query.dto';
 import { ReportStatus, Role, Prisma } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { ReportResponseDto } from './dto/report-response.dto';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class ReportsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationService: NotificationService,
+  ) {}
 
   async create(userId: string, dto: CreateReportDto) {
     const report = await this.prisma.report.create({
@@ -39,6 +43,21 @@ export class ReportsService {
         history: { orderBy: { timestamp: 'asc' } },
       },
     });
+
+    // Notify all ADMIN users
+    const admins = await this.prisma.user.findMany({
+      where: { role: Role.ADMIN },
+      select: { id: true },
+    });
+
+    for (const admin of admins) {
+      await this.notificationService.createNotification(
+        admin.id,
+        'Laporan Baru',
+        `Terdapat laporan baru di ${dto.roadName}`,
+        report.id,
+      );
+    }
 
     return plainToInstance(ReportResponseDto, report, {
       excludeExtraneousValues: true,
