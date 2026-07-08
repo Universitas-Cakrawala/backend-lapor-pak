@@ -21,37 +21,35 @@ export class DashboardService {
   }
 
   async getWeeklyReports(): Promise<WeeklyReportDto> {
-    // Generate 8 weeks period
     const weeks: WeeklyReportItemDto[] = [];
     const now = new Date();
-
-    // We want to calculate from the beginning of the week (e.g., Monday)
-    // To make it simpler, we just use rolling 7-day intervals backwards
-    for (let i = 7; i >= 0; i--) {
-      const end = new Date(now);
-      end.setDate(now.getDate() - i * 7);
-      end.setHours(23, 59, 59, 999);
-
-      const start = new Date(end);
-      start.setDate(end.getDate() - 6);
-      start.setHours(0, 0, 0, 0);
-
-      // Format label: "DD MMM - DD MMM"
-      const startLabel = start.toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'short',
-      });
-      const endLabel = end.toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'short',
-      });
-
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    
+    // Get last day of the current month
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+    
+    let currentStart = 1;
+    while (currentStart <= lastDayOfMonth) {
+      let currentEnd = currentStart + 6;
+      if (currentEnd > lastDayOfMonth) {
+        currentEnd = lastDayOfMonth;
+      }
+      
+      const startDate = new Date(year, month, currentStart, 0, 0, 0, 0);
+      const endDate = new Date(year, month, currentEnd, 23, 59, 59, 999);
+      
+      const startLabel = startDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      const endLabel = endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+      
       weeks.push({
-        weekStart: start.toISOString(),
-        weekEnd: end.toISOString(),
+        weekStart: startDate.toISOString(),
+        weekEnd: endDate.toISOString(),
         label: `${startLabel} - ${endLabel}`,
         count: 0,
       });
+      
+      currentStart = currentEnd + 1;
     }
 
     const startDate = new Date(weeks[0].weekStart);
