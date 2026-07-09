@@ -15,7 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: '*', // Untuk development lokal
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization,ngrok-skip-browser-warning',
+    allowedHeaders: 'Content-Type,Authorization',
     exposedHeaders: 'Content-Disposition', // Untuk download file
   });
 
