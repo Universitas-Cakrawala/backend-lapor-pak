@@ -31,10 +31,20 @@ Repositori ini berisi layanan *backend* (API) untuk **Lapor Pak**, sebuah sistem
 ### Prasyarat Instalasi
 Pastikan komputer atau server lokal Anda telah memasang:
 1. **Node.js** (versi 18.x atau yang lebih baru).
-2. **PostgreSQL** (berjalan aktif dengan *database* kosong siap pakai).
-3. **MinIO Server** (sebagai *host* penyimpanan *bucket* S3 lokal).
+2. **Docker & Docker Compose** (jika ingin menjalankan PostgreSQL & MinIO dengan mudah).
 
-### Langkah Instalasi
+### Menjalankan Infrastruktur dengan Docker
+Repositori ini menyediakan berkas `docker-compose.yml` untuk menyalakan database PostgreSQL dan object storage MinIO secara lokal.
+
+1. Jalankan layanan Docker Compose:
+   ```bash
+   docker compose up -d
+   ```
+   Perintah ini akan menjalankan:
+   * **PostgreSQL** pada port `5433` (dengan nama database `lapor_pak_db`).
+   * **MinIO API** pada port `9000` dan **MinIO Console** pada port `9001` (Kredensial default: `minioadmin` / `minioadmin`).
+
+### Langkah Instalasi Aplikasi
 1. *Clone* repositori ini:
    ```bash
    git clone https://github.com/Universitas-Cakrawala/backend-lapor-pak.git
@@ -48,18 +58,18 @@ Pastikan komputer atau server lokal Anda telah memasang:
    ```bash
    cp .env.example .env
    ```
-   *Buka file `.env` dan pastikan kredensial `DATABASE_URL` (PostgreSQL) serta kredensial API MinIO Anda sudah benar.*
+   *Buka berkas `.env` dan pastikan konfigurasi host, port, dan kredensial database/MinIO sudah sesuai dengan yang didefinisikan di `docker-compose.yml`.*
 
-4. Sinkronisasikan skema *database* menggunakan Prisma:
+4. Jalankan migrasi Prisma untuk membuat skema tabel:
    ```bash
    npx prisma migrate dev
    ```
-   *(Opsional) Untuk memuat data simulasi awal (seed):*
+   *(Opsional) Masukkan data awal (seed) akun admin default:*
    ```bash
    npx prisma db seed
    ```
 
-5. Nyalakan Server (Mode Development):
+5. Jalankan aplikasi (Mode Development):
    ```bash
    npm run start:dev
    ```
